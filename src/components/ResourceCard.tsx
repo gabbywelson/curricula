@@ -1,3 +1,4 @@
+import posthog from 'posthog-js';
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +25,22 @@ const typeLabels: Record<ResourceType, string> = {
 export function ResourceCard({ resource }: ResourceCardProps) {
   return (
     <article className="group relative">
-      <Link href={`/resources/${resource.slug}`} className="block">
+      <Link
+        href={`/resources/${resource.slug}`}
+        className="block"
+        onClick={() => {
+          posthog.capture("resource_card_clicked", {
+            resource_id: resource.id,
+            resource_slug: resource.slug,
+            resource_title: resource.title,
+            resource_type: resource.type,
+            creator_name: resource.creator.name,
+            category_name: resource.category.name,
+            price: resource.price,
+            is_featured: resource.isFeatured,
+          });
+        }}
+      >
         {/* Image container */}
         <div className="aspect-4/3 relative overflow-hidden rounded-lg bg-stone-100 mb-4">
           {resource.imageUrl ? (

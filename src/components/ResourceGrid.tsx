@@ -37,4 +37,3 @@ export function ResourceGrid({ resources, title }: ResourceGridProps) {
     </section>
   );
 }
-
