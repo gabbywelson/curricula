@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export function Hero() {
   const [email, setEmail] = useState("");
@@ -32,19 +34,19 @@ export function Hero() {
           onSubmit={handleSubmit}
           className="mt-10 flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
         >
-          <input
+          <Input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            className="flex-1 px-5 py-3 rounded-full border border-stone-300 bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:border-transparent transition-shadow"
+            className="flex-1 h-12 px-5 rounded-full border-stone-300 bg-white focus-visible:ring-stone-900 focus-visible:border-stone-900"
           />
-          <button
+          <Button
             type="submit"
-            className="px-6 py-3 bg-stone-900 text-white rounded-full font-medium hover:bg-stone-800 transition-colors whitespace-nowrap"
+            className="h-12 px-6 rounded-full bg-stone-900 hover:bg-stone-800"
           >
             Get Updates →
-          </button>
+          </Button>
         </form>
 
         <p className="mt-4 text-xs text-stone-400">
@@ -54,4 +56,3 @@ export function Hero() {
     </section>
   );
 }
-

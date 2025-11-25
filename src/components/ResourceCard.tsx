@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 import type { Resource, Creator, Category } from "@/db/schema";
 
 type ResourceWithRelations = Resource & {
@@ -44,15 +45,18 @@ export function ResourceCard({ resource }: ResourceCardProps) {
 
           {/* Featured badge */}
           {resource.isFeatured && (
-            <div className="absolute top-3 left-3 px-2.5 py-1 bg-amber-400 text-amber-950 text-xs font-medium rounded-full">
+            <Badge className="absolute top-3 left-3 bg-amber-400 text-amber-950 border-transparent hover:bg-amber-400">
               Staff Pick
-            </div>
+            </Badge>
           )}
 
           {/* Type badge */}
-          <div className="absolute top-3 right-3 px-2.5 py-1 bg-white/90 backdrop-blur-sm text-stone-700 text-xs font-medium rounded-full">
+          <Badge
+            variant="secondary"
+            className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-stone-700 border-transparent"
+          >
             {typeLabels[resource.type] || resource.type}
-          </div>
+          </Badge>
         </div>
 
         {/* Content */}
@@ -89,4 +93,3 @@ export function ResourceCard({ resource }: ResourceCardProps) {
     </article>
   );
 }
-

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function Header() {
   return (
@@ -17,15 +18,11 @@ export function Header() {
           >
             Browse
           </Link>
-          <Link
-            href="/browse"
-            className="text-sm bg-stone-900 text-white px-4 py-2 rounded-full hover:bg-stone-800 transition-colors"
-          >
-            Explore All →
-          </Link>
+          <Button asChild className="rounded-full bg-stone-900 hover:bg-stone-800">
+            <Link href="/browse">Explore All →</Link>
+          </Button>
         </nav>
       </div>
     </header>
   );
 }
-

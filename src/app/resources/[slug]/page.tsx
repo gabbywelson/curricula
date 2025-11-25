@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { ExternalLink } from "lucide-react";
 import { getResourceBySlug, getRelatedResources } from "@/lib/queries";
-import { ResourceGrid } from "@/components/ResourceGrid";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
 
 type ResourcePageProps = {
@@ -75,9 +77,9 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
 
             {/* Featured badge */}
             {resource.isFeatured && (
-              <div className="absolute top-4 left-4 px-3 py-1.5 bg-amber-400 text-amber-950 text-sm font-medium rounded-full">
+              <Badge className="absolute top-4 left-4 bg-amber-400 text-amber-950 border-transparent hover:bg-amber-400 text-sm px-3 py-1.5">
                 Staff Pick
-              </div>
+              </Badge>
             )}
           </div>
 
@@ -107,9 +109,12 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
 
             {/* Type and Price */}
             <div className="flex items-center gap-4">
-              <span className="px-3 py-1.5 bg-stone-100 text-stone-600 text-sm font-medium rounded-full">
+              <Badge
+                variant="secondary"
+                className="bg-stone-100 text-stone-600 border-transparent"
+              >
                 {typeLabels[resource.type] || resource.type}
-              </span>
+              </Badge>
               <span
                 className={`text-lg font-medium ${
                   resource.price === "Free"
@@ -132,27 +137,20 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
 
             {/* CTA */}
             <div className="pt-4">
-              <a
-                href={resource.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-stone-900 text-white rounded-full font-medium hover:bg-stone-800 transition-colors text-lg"
+              <Button
+                asChild
+                size="lg"
+                className="h-14 px-8 rounded-full bg-stone-900 hover:bg-stone-800 text-lg"
               >
-                Start Learning
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                <a
+                  href={resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </a>
+                  Start Learning
+                  <ExternalLink className="ml-2 size-5" />
+                </a>
+              </Button>
             </div>
 
             {/* Metadata */}
@@ -231,4 +229,3 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     </div>
   );
 }
-
