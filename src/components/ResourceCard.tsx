@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import type { Resource, Creator, Category } from "@/db/schema";
+import type { Resource, Creator, Category, ResourceType } from "@/db/schema";
 
 type ResourceWithRelations = Resource & {
   creator: Creator;
@@ -12,7 +12,7 @@ type ResourceCardProps = {
   resource: ResourceWithRelations;
 };
 
-const typeLabels: Record<string, string> = {
+const typeLabels: Record<ResourceType, string> = {
   BOOK: "Book",
   COURSE: "Course",
   YOUTUBE_SERIES: "YouTube",
@@ -55,7 +55,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
             variant="secondary"
             className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-stone-700 border-transparent"
           >
-            {typeLabels[resource.type] || resource.type}
+            {typeLabels[resource.type]}
           </Badge>
         </div>
 

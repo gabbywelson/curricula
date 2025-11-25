@@ -6,12 +6,13 @@ import { getResourceBySlug, getRelatedResources } from "@/lib/queries";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
+import type { ResourceType } from "@/db/schema";
 
 type ResourcePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-const typeLabels: Record<string, string> = {
+const typeLabels: Record<ResourceType, string> = {
   BOOK: "Book",
   COURSE: "Course",
   YOUTUBE_SERIES: "YouTube Series",
@@ -113,7 +114,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                 variant="secondary"
                 className="bg-stone-100 text-stone-600 border-transparent"
               >
-                {typeLabels[resource.type] || resource.type}
+                {typeLabels[resource.type]}
               </Badge>
               <span
                 className={`text-lg font-medium ${
