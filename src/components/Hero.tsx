@@ -31,8 +31,8 @@ export function Hero() {
           </div>
 
           {/* Coming soon overlay */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-serif text-lg text-stone-500 italic tracking-wide">
+          <div className="absolute inset-0 flex items-center justify-center z-10">
+            <span className="font-serif text-lg text-stone-600 italic tracking-wide bg-white/90 backdrop-blur-sm px-6 py-2 rounded-full shadow-sm border border-stone-100">
               coming soon
             </span>
           </div>

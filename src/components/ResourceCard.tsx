@@ -1,3 +1,5 @@
+'use client';
+
 import posthog from 'posthog-js';
 import Link from "next/link";
 import Image from "next/image";
