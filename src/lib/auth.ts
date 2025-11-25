@@ -2,8 +2,11 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
+import { env } from "@/env";
 
 export const auth = betterAuth({
+  secret: env.BETTER_AUTH_SECRET,
+  baseURL: env.BETTER_AUTH_URL ?? env.NEXT_PUBLIC_APP_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -36,9 +39,7 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: [
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-  ],
+  trustedOrigins: [env.NEXT_PUBLIC_APP_URL],
 });
 
 // Helper to check if a user is an admin

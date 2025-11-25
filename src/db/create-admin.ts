@@ -14,18 +14,23 @@
  */
 
 import "dotenv/config";
+import { env } from "../env";
 import { auth } from "../lib/auth";
 
 async function createAdminUser() {
-  const email = process.env.ADMIN_EMAIL;
-  const password = process.env.ADMIN_PASSWORD;
-  const name = process.env.ADMIN_NAME || "Admin";
+  const email = env.ADMIN_EMAIL;
+  const password = env.ADMIN_PASSWORD;
+  const name = env.ADMIN_NAME || "Admin";
 
   if (!email || !password) {
-    console.error("Error: ADMIN_EMAIL and ADMIN_PASSWORD environment variables are required.");
+    console.error(
+      "Error: ADMIN_EMAIL and ADMIN_PASSWORD environment variables are required."
+    );
     console.error("");
     console.error("Usage:");
-    console.error("  ADMIN_EMAIL=your@email.com ADMIN_PASSWORD=yourpassword npx tsx src/db/create-admin.ts");
+    console.error(
+      "  ADMIN_EMAIL=your@email.com ADMIN_PASSWORD=yourpassword npx tsx src/db/create-admin.ts"
+    );
     process.exit(1);
   }
 
@@ -58,7 +63,10 @@ async function createAdminUser() {
     const { user } = await import("../db/schema");
     const { eq } = await import("drizzle-orm");
 
-    await db.update(user).set({ role: "admin" }).where(eq(user.id, ctx.user.id));
+    await db
+      .update(user)
+      .set({ role: "admin" })
+      .where(eq(user.id, ctx.user.id));
 
     console.log(`Successfully created admin user!`);
     console.log("");
@@ -71,11 +79,17 @@ async function createAdminUser() {
   } catch (error) {
     if (error instanceof Error) {
       // Check for duplicate email error
-      if (error.message.includes("duplicate") || error.message.includes("already exists") || error.message.includes("UNIQUE")) {
+      if (
+        error.message.includes("duplicate") ||
+        error.message.includes("already exists") ||
+        error.message.includes("UNIQUE")
+      ) {
         console.error(`Error: A user with email "${email}" already exists.`);
         console.error("");
         console.error("If you need to reset the admin password, you can:");
-        console.error("1. Delete the user from the database and run this script again");
+        console.error(
+          "1. Delete the user from the database and run this script again"
+        );
         console.error("2. Or update the password directly in the database");
       } else {
         console.error("Error creating admin user:", error.message);
@@ -90,4 +104,3 @@ async function createAdminUser() {
 }
 
 createAdminUser();
-

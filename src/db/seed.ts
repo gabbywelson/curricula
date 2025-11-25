@@ -1,14 +1,11 @@
 import "dotenv/config";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
+import { env } from "../env";
 import { creators, categories, resources, tags, resourceTags } from "./schema";
 
 async function seed() {
-  if (!process.env.DATABASE_URL) {
-    throw new Error("DATABASE_URL environment variable is not set");
-  }
-
-  const sql = neon(process.env.DATABASE_URL);
+  const sql = neon(env.DATABASE_URL);
   const db = drizzle(sql);
 
   console.log("🌱 Seeding database...");
