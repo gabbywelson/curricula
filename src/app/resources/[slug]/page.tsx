@@ -6,28 +6,19 @@ import { getResourceBySlug, getRelatedResources } from "@/lib/queries";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
-import type { Resource, Creator, Category } from "@/db/schema";
 
 type ResourcePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-type ResourceWithRelations = Resource & {
-  creator: Creator;
-  category: Category;
+const typeLabels: Record<string, string> = {
+  BOOK: "Book",
+  COURSE: "Course",
+  YOUTUBE_SERIES: "YouTube Series",
+  PODCAST: "Podcast",
+  ARTICLE: "Article",
+  COHORT_PROGRAM: "Cohort Program",
 };
-
-function getTypeLabel(type: string): string {
-  const labels: Record<string, string> = {
-    BOOK: "Book",
-    COURSE: "Course",
-    YOUTUBE_SERIES: "YouTube Series",
-    PODCAST: "Podcast",
-    ARTICLE: "Article",
-    COHORT_PROGRAM: "Cohort Program",
-  };
-  return labels[type] ?? type;
-}
 
 export async function generateMetadata({
   params,
@@ -49,23 +40,16 @@ export async function generateMetadata({
 
 export default async function ResourcePage({ params }: ResourcePageProps) {
   const { slug } = await params;
-  const result = await getResourceBySlug(slug);
+  const resource = await getResourceBySlug(slug);
 
-  if (!result) {
+  if (!resource) {
     notFound();
   }
-
-  // Type assertion to help TypeScript understand the shape
-  const resource = result as ResourceWithRelations;
 
   const relatedResources = await getRelatedResources(
     resource.categoryId,
     resource.id
   );
-
-  const typeLabel = getTypeLabel(resource.type);
-  const priceText = String(resource.price);
-  const isFree = priceText === "Free";
 
   return (
     <div>
@@ -129,14 +113,16 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                 variant="secondary"
                 className="bg-stone-100 text-stone-600 border-transparent"
               >
-                {typeLabel}
+                {typeLabels[resource.type] ?? resource.type}
               </Badge>
               <span
                 className={`text-lg font-medium ${
-                  isFree ? "text-emerald-600" : "text-stone-900"
+                  resource.price === "Free"
+                    ? "text-emerald-600"
+                    : "text-stone-900"
                 }`}
               >
-                {priceText}
+                {resource.price}
               </span>
             </div>
 
@@ -167,7 +153,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
               </Button>
             </div>
 
-            {/* Metadata */}
+            {/* Metadata - using ternary instead of && to avoid unknown type issue */}
             {resource.metadata != null ? (
               <div className="pt-6 border-t border-stone-200">
                 <h3 className="text-sm font-medium text-stone-400 uppercase tracking-wider mb-3">
