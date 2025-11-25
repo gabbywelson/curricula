@@ -1,5 +1,5 @@
-import { eq, sql, desc } from "drizzle-orm";
-import { db, resources, categories, creators } from "@/db";
+import { eq, sql, desc, and, inArray } from "drizzle-orm";
+import { db, resources, categories, creators, tags, resourceTags } from "@/db";
 
 // Get all categories with resource counts
 export async function getCategoriesWithCounts() {
@@ -19,24 +19,60 @@ export async function getCategoriesWithCounts() {
   return result;
 }
 
+// Get all tags with resource counts
+export async function getTagsWithCounts() {
+  const result = await db
+    .select({
+      id: tags.id,
+      name: tags.name,
+      slug: tags.slug,
+      resourceCount: sql<number>`count(${resourceTags.resourceId})::int`,
+    })
+    .from(tags)
+    .leftJoin(resourceTags, eq(resourceTags.tagId, tags.id))
+    .groupBy(tags.id)
+    .orderBy(tags.name);
+
+  return result;
+}
+
 // Get all resources with creator and category info
-export async function getResources(categorySlug?: string) {
+export async function getResources(categorySlug?: string, tagSlug?: string) {
+  const conditions = [];
+
+  if (categorySlug) {
+    conditions.push(
+      eq(
+        resources.categoryId,
+        db
+          .select({ id: categories.id })
+          .from(categories)
+          .where(eq(categories.slug, categorySlug))
+          .limit(1)
+      )
+    );
+  }
+
+  if (tagSlug) {
+    conditions.push(
+      inArray(
+        resources.id,
+        db
+          .select({ resourceId: resourceTags.resourceId })
+          .from(resourceTags)
+          .innerJoin(tags, eq(resourceTags.tagId, tags.id))
+          .where(eq(tags.slug, tagSlug))
+      )
+    );
+  }
+
   const query = db.query.resources.findMany({
     with: {
       creator: true,
       category: true,
     },
     orderBy: [desc(resources.isFeatured), desc(resources.createdAt)],
-    where: categorySlug
-      ? eq(
-          resources.categoryId,
-          db
-            .select({ id: categories.id })
-            .from(categories)
-            .where(eq(categories.slug, categorySlug))
-            .limit(1)
-        )
-      : undefined,
+    where: conditions.length > 0 ? and(...conditions) : undefined,
   });
 
   return query;

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Hero } from "@/components/Hero";
-import { CategoryPills } from "@/components/CategoryPills";
+import { FilterPills } from "@/components/FilterPills";
 import { ResourceGrid } from "@/components/ResourceGrid";
 import { getCategoriesWithCounts, getResources } from "@/lib/queries";
 
@@ -15,7 +15,18 @@ async function ResourcesSection({ categorySlug }: { categorySlug?: string }) {
 
 async function CategoriesSection() {
   const categories = await getCategoriesWithCounts();
-  return <CategoryPills categories={categories} />;
+  return (
+    <section className="px-6 py-8 border-b border-stone-200">
+      <div className="max-w-6xl mx-auto">
+        <FilterPills
+          items={categories}
+          paramName="category"
+          layout="row"
+          className="py-0"
+        />
+      </div>
+    </section>
+  );
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
