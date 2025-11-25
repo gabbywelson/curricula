@@ -15,17 +15,15 @@ const {
   getSession,
 } = authClient;
 
-const signIn = (...args: Parameters<typeof originalSignIn>) => {
-  const [options] = args;
-  if (options && typeof options === 'object' && 'provider' in options && typeof options.provider === 'string') {
-    posthog.capture('user-signed-in', { provider: options.provider });
-  } else {
-    posthog.capture('user-signed-in');
-  }
-  return originalSignIn(...args);
+const signIn = {
+  ...originalSignIn,
+  email: async (...args: Parameters<typeof originalSignIn.email>) => {
+    posthog.capture('user-signed-in', { provider: 'email' });
+    return originalSignIn.email(...args);
+  },
 };
 
-const signOut = (...args: Parameters<typeof originalSignOut>) => {
+const signOut = async (...args: Parameters<typeof originalSignOut>) => {
   posthog.capture('user-signed-out');
   return originalSignOut(...args);
 };
