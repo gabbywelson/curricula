@@ -42,6 +42,8 @@ export const auth = betterAuth({
   trustedOrigins: [
     env.NEXT_PUBLIC_APP_URL,
     ...(env.BETTER_AUTH_URL ? [env.BETTER_AUTH_URL] : []),
+    "https://curricula.fun",
+    "https://www.curricula.fun",
   ],
 });
 
@@ -51,4 +53,3 @@ export function isAdmin(user: { role?: string | null } | null): boolean {
 }
 
 export type AuthSession = typeof auth.$Infer.Session;
-
