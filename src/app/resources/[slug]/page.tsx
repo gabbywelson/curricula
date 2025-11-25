@@ -6,20 +6,22 @@ import { getResourceBySlug, getRelatedResources } from "@/lib/queries";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
-import type { ResourceType } from "@/db/schema";
 
 type ResourcePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-const typeLabels: Record<ResourceType, string> = {
-  BOOK: "Book",
-  COURSE: "Course",
-  YOUTUBE_SERIES: "YouTube Series",
-  PODCAST: "Podcast",
-  ARTICLE: "Article",
-  COHORT_PROGRAM: "Cohort Program",
-};
+function getTypeLabel(type: string): string {
+  const labels: Record<string, string> = {
+    BOOK: "Book",
+    COURSE: "Course",
+    YOUTUBE_SERIES: "YouTube Series",
+    PODCAST: "Podcast",
+    ARTICLE: "Article",
+    COHORT_PROGRAM: "Cohort Program",
+  };
+  return labels[type] ?? type;
+}
 
 export async function generateMetadata({
   params,
@@ -51,6 +53,10 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     resource.categoryId,
     resource.id
   );
+
+  const typeLabel = getTypeLabel(resource.type);
+  const priceText = resource.price;
+  const isFree = priceText === "Free";
 
   return (
     <div>
@@ -110,20 +116,13 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
 
             {/* Type and Price */}
             <div className="flex items-center gap-4">
-              <Badge
-                variant="secondary"
-                className="bg-stone-100 text-stone-600 border-transparent"
-              >
-                {typeLabels[resource.type]}
-              </Badge>
+              <span className="inline-flex items-center justify-center rounded-full px-3 py-1.5 text-sm font-medium bg-stone-100 text-stone-600">
+                {typeLabel}
+              </span>
               <span
-                className={`text-lg font-medium ${
-                  resource.price === "Free"
-                    ? "text-emerald-600"
-                    : "text-stone-900"
-                }`}
+                className={`text-lg font-medium ${isFree ? "text-emerald-600" : "text-stone-900"}`}
               >
-                {resource.price}
+                {priceText}
               </span>
             </div>
 
