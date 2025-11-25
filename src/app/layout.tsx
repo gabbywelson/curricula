@@ -22,9 +22,41 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Curricula - Curated Educational Resources",
+  title: {
+    default: "Curricula - Curated Educational Resources",
+    template: "%s | Curricula",
+  },
   description:
     "Discover the best courses, books, podcasts, and educational content—handpicked and organized for your learning journey.",
+  metadataBase: new URL("https://curricula-v8bl.vercel.app"),
+  openGraph: {
+    title: "Curricula - Curated Educational Resources",
+    description:
+      "Discover the best courses, books, podcasts, and educational content—handpicked and organized for your learning journey.",
+    url: "https://curricula-v8bl.vercel.app",
+    siteName: "Curricula",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Curricula - Learn from the best. Curated for you.",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Curricula - Curated Educational Resources",
+    description:
+      "Discover the best courses, books, podcasts, and educational content—handpicked and organized for your learning journey.",
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
