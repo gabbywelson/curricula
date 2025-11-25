@@ -47,6 +47,29 @@ export function Footer() {
                 </li>
               </ul>
             </div>
+            <div>
+              <h4 className="text-xs font-medium text-stone-400 uppercase tracking-wider mb-3">
+                About
+              </h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="/about"
+                    className="text-sm text-stone-600 hover:text-stone-900 transition-colors"
+                  >
+                    About Curricula
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/about#roadmap"
+                    className="text-sm text-stone-600 hover:text-stone-900 transition-colors"
+                  >
+                    Roadmap
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 

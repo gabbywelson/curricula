@@ -18,7 +18,16 @@ export function Header() {
           >
             Browse
           </Link>
-          <Button asChild className="rounded-full bg-stone-900 hover:bg-stone-800">
+          <Link
+            href="/about"
+            className="text-sm text-stone-600 hover:text-stone-900 transition-colors"
+          >
+            About
+          </Link>
+          <Button
+            asChild
+            className="rounded-full bg-stone-900 hover:bg-stone-800"
+          >
             <Link href="/browse">Explore All →</Link>
           </Button>
         </nav>
