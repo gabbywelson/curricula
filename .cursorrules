@@ -1,0 +1,45 @@
+# Project Rules
+
+## Package Manager
+- ALWAYS use `pnpm` for all package operations.
+- NEVER use `npm` or `yarn`.
+
+## Tech Stack
+- Framework: Next.js (App Router)
+- Styling: Tailwind CSS v4 (configured in `src/app/globals.css`)
+- Database: NeonDB (Postgres) with Drizzle ORM
+- Auth: Better Auth
+- Analytics: PostHog
+- Env Vars: T3 Env (`@t3-oss/env-nextjs`)
+
+## Code Style & Patterns
+
+### Analytics (PostHog)
+- MANDATORY: All user interactions (clicks, form submissions, navigation) MUST have analytics tracking.
+- Use `posthog.capture('event_name', { property: value })`.
+- Event naming convention: `snake_case` (e.g., `button_clicked`, `form_submitted`).
+- Always include relevant context properties (e.g., `destination`, `button_text`, `error_message`).
+
+### Database (Drizzle ORM)
+- Schema definition: `src/db/schema.ts`
+- Database connection/client: `src/db/index.ts`
+- Use `drizzle-orm` query builder methods (e.g., `db.query`, `db.select`).
+- Run `pnpm db:generate` after schema changes.
+- Run `pnpm db:migrate` or `pnpm db:push` to apply changes.
+
+### Styling (Tailwind CSS)
+- Use Tailwind CSS utility classes for styling.
+- Define custom themes and variables in `src/app/globals.css` using standard CSS variables or `@theme` block if applicable for v4.
+- Use `clsx` and `tailwind-merge` (via `cn()` utility) for conditional classes.
+
+### Environment Variables
+- ALWAYS use `env` from `@/env` (defined in `src/env.ts`) to access environment variables.
+- NEVER use `process.env` directly in application code (except in config files where necessary).
+
+### Project Structure
+- Source code: `src/`
+- App Router: `src/app/`
+- Components: `src/components/`
+- Database: `src/db/`
+- Utilities: `src/lib/`
+
