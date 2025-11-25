@@ -170,7 +170,7 @@ export default function AboutPage() {
 
           <div className="space-y-8">
             {/* Full width portrait */}
-            <div className="aspect-[4/5] sm:aspect-square w-full relative rounded-2xl overflow-hidden bg-stone-100 shadow-lg">
+            <div className="aspect-[16/9] w-full relative rounded-2xl overflow-hidden bg-stone-100 shadow-lg">
               <Image
                 src="/portrait.png"
                 alt="Gabby Welson"
