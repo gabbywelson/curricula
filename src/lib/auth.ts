@@ -39,7 +39,10 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: [env.NEXT_PUBLIC_APP_URL],
+  trustedOrigins: [
+    env.NEXT_PUBLIC_APP_URL,
+    ...(env.BETTER_AUTH_URL ? [env.BETTER_AUTH_URL] : []),
+  ],
 });
 
 // Helper to check if a user is an admin
