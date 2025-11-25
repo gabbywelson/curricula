@@ -6,9 +6,15 @@ import { getResourceBySlug, getRelatedResources } from "@/lib/queries";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
+import type { Resource, Creator, Category } from "@/db/schema";
 
 type ResourcePageProps = {
   params: Promise<{ slug: string }>;
+};
+
+type ResourceWithRelations = Resource & {
+  creator: Creator;
+  category: Category;
 };
 
 function getTypeLabel(type: string): string {
@@ -43,11 +49,14 @@ export async function generateMetadata({
 
 export default async function ResourcePage({ params }: ResourcePageProps) {
   const { slug } = await params;
-  const resource = await getResourceBySlug(slug);
+  const result = await getResourceBySlug(slug);
 
-  if (!resource) {
+  if (!result) {
     notFound();
   }
+
+  // Type assertion to help TypeScript understand the shape
+  const resource = result as ResourceWithRelations;
 
   const relatedResources = await getRelatedResources(
     resource.categoryId,
@@ -55,7 +64,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
   );
 
   const typeLabel = getTypeLabel(resource.type);
-  const priceText = resource.price;
+  const priceText = String(resource.price);
   const isFree = priceText === "Free";
 
   return (
@@ -64,7 +73,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
       <section className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Image */}
-          <div className="aspect-[4/3] relative overflow-hidden rounded-xl bg-stone-100">
+          <div className="aspect-4/3 relative overflow-hidden rounded-xl bg-stone-100">
             {resource.imageUrl ? (
               <Image
                 src={resource.imageUrl}
@@ -116,11 +125,16 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
 
             {/* Type and Price */}
             <div className="flex items-center gap-4">
-              <span className="inline-flex items-center justify-center rounded-full px-3 py-1.5 text-sm font-medium bg-stone-100 text-stone-600">
+              <Badge
+                variant="secondary"
+                className="bg-stone-100 text-stone-600 border-transparent"
+              >
                 {typeLabel}
-              </span>
+              </Badge>
               <span
-                className={`text-lg font-medium ${isFree ? "text-emerald-600" : "text-stone-900"}`}
+                className={`text-lg font-medium ${
+                  isFree ? "text-emerald-600" : "text-stone-900"
+                }`}
               >
                 {priceText}
               </span>
@@ -154,7 +168,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
             </div>
 
             {/* Metadata */}
-            {resource.metadata && (
+            {resource.metadata != null ? (
               <div className="pt-6 border-t border-stone-200">
                 <h3 className="text-sm font-medium text-stone-400 uppercase tracking-wider mb-3">
                   Details
@@ -167,12 +181,14 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                       <dt className="text-sm text-stone-500 capitalize">
                         {key.replace(/([A-Z])/g, " $1").trim()}
                       </dt>
-                      <dd className="text-stone-900 font-medium">{value}</dd>
+                      <dd className="text-stone-900 font-medium">
+                        {String(value)}
+                      </dd>
                     </div>
                   ))}
                 </dl>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </section>
@@ -196,7 +212,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
               {relatedResources.map((related) => (
                 <article key={related.id} className="group">
                   <Link href={`/resources/${related.slug}`} className="block">
-                    <div className="aspect-[4/3] relative overflow-hidden rounded-lg bg-stone-100 mb-3">
+                    <div className="aspect-4/3 relative overflow-hidden rounded-lg bg-stone-100 mb-3">
                       {related.imageUrl ? (
                         <Image
                           src={related.imageUrl}

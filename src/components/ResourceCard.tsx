@@ -26,7 +26,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
     <article className="group relative">
       <Link href={`/resources/${resource.slug}`} className="block">
         {/* Image container */}
-        <div className="aspect-[4/3] relative overflow-hidden rounded-lg bg-stone-100 mb-4">
+        <div className="aspect-4/3 relative overflow-hidden rounded-lg bg-stone-100 mb-4">
           {resource.imageUrl ? (
             <Image
               src={resource.imageUrl}
@@ -79,7 +79,9 @@ export function ResourceCard({ resource }: ResourceCardProps) {
           <div className="flex items-center justify-between pt-1">
             <span
               className={`text-sm font-medium ${
-                resource.price === "Free" ? "text-emerald-600" : "text-stone-600"
+                resource.price === "Free"
+                  ? "text-emerald-600"
+                  : "text-stone-600"
               }`}
             >
               {resource.price}
