@@ -1,21 +1,7 @@
-"use client";
-
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export function Hero() {
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // For Phase I, this is decorative
-    if (email) {
-      alert("Thanks for subscribing! (This is a demo)");
-      setEmail("");
-    }
-  };
-
   return (
     <section className="py-20 md:py-28 px-6">
       <div className="max-w-3xl mx-auto text-center">
@@ -30,24 +16,27 @@ export function Hero() {
           resources to accelerate your learning journey.
         </p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="mt-10 flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-        >
-          <Input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="flex-1 h-12 px-5 rounded-full border-stone-300 bg-white focus-visible:ring-stone-900 focus-visible:border-stone-900"
-          />
-          <Button
-            type="submit"
-            className="h-12 px-6 rounded-full bg-stone-900 hover:bg-stone-800"
-          >
-            Get Updates →
-          </Button>
-        </form>
+        {/* Email signup - coming soon */}
+        <div className="mt-10 max-w-md mx-auto relative">
+          <div className="flex flex-col sm:flex-row gap-3 opacity-50 pointer-events-none select-none">
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              disabled
+              className="flex-1 h-12 px-5 rounded-full border-stone-300 bg-white"
+            />
+            <Button disabled className="h-12 px-6 rounded-full bg-stone-900">
+              Get Updates →
+            </Button>
+          </div>
+
+          {/* Coming soon overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="font-serif text-lg text-stone-500 italic tracking-wide">
+              coming soon
+            </span>
+          </div>
+        </div>
 
         <p className="mt-4 text-xs text-stone-400">
           Weekly discoveries. No spam. Unsubscribe anytime.
