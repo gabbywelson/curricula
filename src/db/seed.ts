@@ -1,13 +1,7 @@
 import "dotenv/config";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
-import {
-  creators,
-  categories,
-  resources,
-  tags,
-  resourceTags,
-} from "./schema";
+import { creators, categories, resources, tags, resourceTags } from "./schema";
 
 async function seed() {
   if (!process.env.DATABASE_URL) {
@@ -36,7 +30,8 @@ async function seed() {
         name: "Ali Abdaal",
         slug: "ali-abdaal",
         bio: "Doctor turned YouTuber and productivity enthusiast. Sharing evidence-based tips on productivity, studying, and building a fulfilling life.",
-        avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop",
+        avatarUrl:
+          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop",
         websiteUrl: "https://aliabdaal.com",
         twitterUrl: "https://twitter.com/aliabdaal",
       },
@@ -44,7 +39,8 @@ async function seed() {
         name: "Cal Newport",
         slug: "cal-newport",
         bio: "Computer science professor at Georgetown and bestselling author. Writes about digital minimalism, deep work, and career success.",
-        avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
+        avatarUrl:
+          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
         websiteUrl: "https://calnewport.com",
         twitterUrl: "https://twitter.com/caboristhenics",
       },
@@ -52,7 +48,8 @@ async function seed() {
         name: "a16z",
         slug: "a16z",
         bio: "Andreessen Horowitz is a venture capital firm that backs bold entrepreneurs building the future through technology.",
-        avatarUrl: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=200&fit=crop",
+        avatarUrl:
+          "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=200&fit=crop",
         websiteUrl: "https://a16z.com",
         twitterUrl: "https://twitter.com/a16z",
       },
@@ -60,7 +57,8 @@ async function seed() {
         name: "Josh Kaufman",
         slug: "josh-kaufman",
         bio: "Author of The Personal MBA and The First 20 Hours. Teaches practical business skills and rapid skill acquisition.",
-        avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop",
+        avatarUrl:
+          "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop",
         websiteUrl: "https://joshkaufman.net",
         twitterUrl: "https://twitter.com/joshkaufman",
       },
@@ -68,7 +66,8 @@ async function seed() {
         name: "Wes Bos",
         slug: "wes-bos",
         bio: "Full-stack developer and teacher from Canada. Creates world-class courses on JavaScript, React, and modern web development.",
-        avatarUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop",
+        avatarUrl:
+          "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop",
         websiteUrl: "https://wesbos.com",
         twitterUrl: "https://twitter.com/wesbos",
       },
@@ -83,32 +82,38 @@ async function seed() {
       {
         name: "Productivity",
         slug: "productivity",
-        description: "Master your time, energy, and focus. Learn systems and strategies to get more done with less stress.",
+        description:
+          "Master your time, energy, and focus. Learn systems and strategies to get more done with less stress.",
       },
       {
         name: "Software Development",
         slug: "software-development",
-        description: "Learn to code, build apps, and master modern programming languages and frameworks.",
+        description:
+          "Learn to code, build apps, and master modern programming languages and frameworks.",
       },
       {
         name: "Wellness",
         slug: "wellness",
-        description: "Physical and mental health resources for a balanced, fulfilling life.",
+        description:
+          "Physical and mental health resources for a balanced, fulfilling life.",
       },
       {
         name: "Business",
         slug: "business",
-        description: "Entrepreneurship, startups, and professional growth. Build and scale your ventures.",
+        description:
+          "Entrepreneurship, startups, and professional growth. Build and scale your ventures.",
       },
       {
         name: "Finance",
         slug: "finance",
-        description: "Personal finance, investing, and building wealth for the long term.",
+        description:
+          "Personal finance, investing, and building wealth for the long term.",
       },
       {
         name: "Design",
         slug: "design",
-        description: "Visual design, UX, and creative skills for the modern digital world.",
+        description:
+          "Visual design, UX, and creative skills for the modern digital world.",
       },
     ])
     .returning();
@@ -123,7 +128,7 @@ async function seed() {
     const category = createdCategories.find((c) => c.slug === slug);
     if (!category) throw new Error(`Category not found: ${slug}`);
     return category;
-  };;
+  };
 
   // Seed resources
   console.log("Creating resources...");
@@ -138,7 +143,8 @@ async function seed() {
         url: "https://academy.aliabdaal.com",
         type: "COHORT_PROGRAM",
         price: "$4,995",
-        imageUrl: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800&h=600&fit=crop",
         creatorId: findCreator("ali-abdaal").id,
         categoryId: findCategory("productivity").id,
         isFeatured: true,
@@ -152,7 +158,8 @@ async function seed() {
         url: "https://www.amazon.com/Deep-Work-Focused-Success-Distracted/dp/1455586692",
         type: "BOOK",
         price: "$18",
-        imageUrl: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&h=600&fit=crop",
         creatorId: findCreator("cal-newport").id,
         categoryId: findCategory("productivity").id,
         isFeatured: true,
@@ -166,7 +173,8 @@ async function seed() {
         url: "https://a16z.com/podcasts/",
         type: "PODCAST",
         price: "Free",
-        imageUrl: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&h=600&fit=crop",
         creatorId: findCreator("a16z").id,
         categoryId: findCategory("business").id,
         isFeatured: false,
@@ -180,7 +188,8 @@ async function seed() {
         url: "https://personalmba.com",
         type: "BOOK",
         price: "$16",
-        imageUrl: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800&h=600&fit=crop",
         creatorId: findCreator("josh-kaufman").id,
         categoryId: findCategory("business").id,
         isFeatured: true,
@@ -194,7 +203,8 @@ async function seed() {
         url: "https://javascript30.com",
         type: "COURSE",
         price: "Free",
-        imageUrl: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&h=600&fit=crop",
         creatorId: findCreator("wes-bos").id,
         categoryId: findCategory("software-development").id,
         isFeatured: true,
@@ -208,7 +218,8 @@ async function seed() {
         url: "https://reactforbeginners.com",
         type: "COURSE",
         price: "$139",
-        imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=600&fit=crop",
         creatorId: findCreator("wes-bos").id,
         categoryId: findCategory("software-development").id,
         isFeatured: false,
@@ -222,7 +233,8 @@ async function seed() {
         url: "https://www.amazon.com/Slow-Productivity-Accomplishment-Without-Burnout/dp/0593544854",
         type: "BOOK",
         price: "$28",
-        imageUrl: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=600&fit=crop",
         creatorId: findCreator("cal-newport").id,
         categoryId: findCategory("wellness").id,
         isFeatured: false,
@@ -236,7 +248,8 @@ async function seed() {
         url: "https://a16z.com/crypto-startup-school/",
         type: "YOUTUBE_SERIES",
         price: "Free",
-        imageUrl: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=600&fit=crop",
         creatorId: findCreator("a16z").id,
         categoryId: findCategory("finance").id,
         isFeatured: false,
@@ -250,7 +263,8 @@ async function seed() {
         url: "https://first20hours.com",
         type: "BOOK",
         price: "$15",
-        imageUrl: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=600&fit=crop",
         creatorId: findCreator("josh-kaufman").id,
         categoryId: findCategory("productivity").id,
         isFeatured: false,
@@ -264,7 +278,8 @@ async function seed() {
         url: "https://aliabdaal.com/courses/productivity/",
         type: "COURSE",
         price: "$249",
-        imageUrl: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop",
         creatorId: findCreator("ali-abdaal").id,
         categoryId: findCategory("productivity").id,
         isFeatured: false,
@@ -351,4 +366,3 @@ seed().catch((error) => {
   console.error("❌ Seeding failed:", error);
   process.exit(1);
 });
-

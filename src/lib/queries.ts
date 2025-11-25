@@ -28,8 +28,10 @@ export async function getResources(categorySlug?: string) {
     },
     orderBy: [desc(resources.isFeatured), desc(resources.createdAt)],
     where: categorySlug
-      ? eq(resources.categoryId, 
-          db.select({ id: categories.id })
+      ? eq(
+          resources.categoryId,
+          db
+            .select({ id: categories.id })
             .from(categories)
             .where(eq(categories.slug, categorySlug))
             .limit(1)
@@ -54,7 +56,11 @@ export async function getResourceBySlug(slug: string) {
 }
 
 // Get resources by category (excluding a specific resource)
-export async function getRelatedResources(categoryId: number, excludeResourceId: number, limit = 4) {
+export async function getRelatedResources(
+  categoryId: number,
+  excludeResourceId: number,
+  limit = 4
+) {
   const result = await db.query.resources.findMany({
     where: eq(resources.categoryId, categoryId),
     with: {
@@ -116,4 +122,3 @@ export async function getResourcesByCategorySlug(categorySlug: string) {
 
   return result;
 }
-

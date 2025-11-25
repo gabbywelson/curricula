@@ -10,7 +10,8 @@ export function Footer() {
               Curricula
             </Link>
             <p className="text-sm text-stone-500 mt-2 max-w-sm">
-              A curated directory of the best educational resources on the internet.
+              A curated directory of the best educational resources on the
+              internet.
             </p>
           </div>
 
@@ -58,4 +59,3 @@ export function Footer() {
     </footer>
   );
 }
-
