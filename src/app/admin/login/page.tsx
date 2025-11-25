@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+import posthog from 'posthog-js';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -24,17 +25,22 @@ export default function AdminLoginPage() {
       });
 
       if (result.error) {
-        setError(result.error.message || "Invalid credentials");
+        const errorMessage = result.error.message || "Invalid credentials";
+        setError(errorMessage);
+        posthog.capture('admin-login-failed', { email: email, error: errorMessage });
         setLoading(false);
         return;
       }
 
+      posthog.capture('admin-login-success', { email: email });
       // Redirect to admin dashboard
       router.push("/admin");
       router.refresh();
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : "An unexpected error occurred");
+      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred";
+      setError(errorMessage);
+      posthog.capture('admin-login-failed', { email: email, error: errorMessage });
       setLoading(false);
     }
   };
@@ -175,4 +181,3 @@ export default function AdminLoginPage() {
     </div>
   );
 }
-

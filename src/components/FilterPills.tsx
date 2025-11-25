@@ -1,5 +1,6 @@
 "use client";
 
+import posthog from 'posthog-js';
 import Link from "next/link";
 import { useSearchParams, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -58,6 +59,13 @@ export function FilterPills({
       >
         <Link
           href={createHref(null)}
+          onClick={() =>
+            posthog.capture("filter_pill_clicked", {
+              filter_name: "All",
+              filter_slug: null,
+              filter_param: paramName,
+            })
+          }
           className={cn(
             "shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border",
             !activeValue
@@ -72,6 +80,14 @@ export function FilterPills({
           <Link
             key={item.id}
             href={createHref(item.slug)}
+            onClick={() =>
+              posthog.capture("filter_pill_clicked", {
+                filter_name: item.name,
+                filter_slug: item.slug,
+                filter_param: paramName,
+                resource_count: item.resourceCount,
+              })
+            }
             className={cn(
               "shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border",
               activeValue === item.slug

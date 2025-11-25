@@ -1,5 +1,8 @@
+'use client';
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import posthog from 'posthog-js';
 
 export function Header() {
   return (
@@ -15,18 +18,21 @@ export function Header() {
           <Link
             href="/browse"
             className="text-sm text-stone-600 hover:text-stone-900 transition-colors"
+            onClick={() => posthog.capture('header_nav_link_clicked', { destination: '/browse', link_text: 'Browse' })}
           >
             Browse
           </Link>
           <Link
             href="/about"
             className="text-sm text-stone-600 hover:text-stone-900 transition-colors"
+            onClick={() => posthog.capture('header_nav_link_clicked', { destination: '/about', link_text: 'About' })}
           >
             About
           </Link>
           <Button
             asChild
             className="rounded-full bg-stone-900 hover:bg-stone-800"
+            onClick={() => posthog.capture('header_cta_clicked', { destination: '/browse' })}
           >
             <Link href="/browse">Explore All →</Link>
           </Button>

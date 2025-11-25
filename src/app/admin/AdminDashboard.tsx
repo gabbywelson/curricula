@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { signOut } from "@/lib/auth-client";
+import posthog from "posthog-js";
 
 interface AdminDashboardProps {
   user: {
@@ -16,6 +17,9 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
   const router = useRouter();
 
   const handleSignOut = async () => {
+    posthog.capture("admin_signed_out", {
+      user_id: user.id,
+    });
     await signOut();
     router.push("/admin/login");
     router.refresh();
@@ -40,6 +44,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                   strokeLinejoin="round"
                   d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
                 />
+                <title>Curricula Logo</title>
               </svg>
             </div>
             <span className="font-serif text-xl tracking-tight">
@@ -55,6 +60,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
             <button
               onClick={handleSignOut}
               className="rounded-lg border border-[#27272a] bg-[#18181b] px-3 py-1.5 text-sm text-[#a1a1aa] transition-colors hover:border-[#3f3f46] hover:text-[#fafafa]"
+              type="button"
             >
               Sign out
             </button>
@@ -99,6 +105,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                     strokeLinejoin="round"
                     d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
+                  <title>Authentication Working</title>
                 </svg>
               </div>
               <div>
@@ -145,6 +152,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                   strokeLinejoin="round"
                   d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
                 />
+                <title>Resources</title>
               </svg>
             }
             comingSoon
@@ -170,6 +178,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                   strokeLinejoin="round"
                   d="M6 6h.008v.008H6V6z"
                 />
+                <title>Tags</title>
               </svg>
             }
             comingSoon
@@ -190,6 +199,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                   strokeLinejoin="round"
                   d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"
                 />
+                <title>Categories</title>
               </svg>
             }
             comingSoon
@@ -237,6 +247,3 @@ function QuickActionCard({
     </div>
   );
 }
-
-
-

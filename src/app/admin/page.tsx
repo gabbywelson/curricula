@@ -20,4 +20,3 @@ export default async function AdminPage() {
 
   return <AdminDashboard user={session.user} />;
 }
-
