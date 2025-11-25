@@ -10,6 +10,8 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "drizzle-orm": "^0.44.7",
     "next": "16.0.4",
     "react": "19.2.0",
     "react-dom": "19.2.0"
@@ -21,6 +23,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "dotenv": "^17.2.3",
+    "drizzle-kit": "^0.31.7",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
