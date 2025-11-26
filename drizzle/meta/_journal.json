@@ -15,6 +15,13 @@
       "when": 1764091837323,
       "tag": "0001_chubby_dragon_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764139755821,
+      "tag": "0002_youthful_kat_farrell",
+      "breakpoints": true
     }
   ]
 }

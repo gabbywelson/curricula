@@ -100,6 +100,12 @@ export const resourceTypeEnum = pgEnum("resource_type", [
   "COHORT_PROGRAM",
 ]);
 
+export const submissionStatusEnum = pgEnum("submission_status", [
+  "pending",
+  "approved",
+  "rejected",
+]);
+
 // Creators table
 export const creators = pgTable("creators", {
   id: serial("id").primaryKey(),
@@ -166,6 +172,42 @@ export const resourceTags = pgTable(
   (table) => [primaryKey({ columns: [table.resourceId, table.tagId] })]
 );
 
+// Pending submissions from agents
+export const pendingSubmissions = pgTable("pending_submissions", {
+  id: serial("id").primaryKey(),
+
+  // Core resource data (denormalized - not FKs yet)
+  title: text("title").notNull(),
+  description: text("description"),
+  url: text("url").notNull(),
+  type: resourceTypeEnum("type").notNull(),
+  price: text("price").default("Unknown"),
+  imageUrl: text("image_url"),
+
+  // These are TEXT, not foreign keys - resolved on approval
+  creatorName: text("creator_name").notNull(),
+  creatorUrl: text("creator_url"),
+  suggestedCategory: text("suggested_category").notNull(),
+  suggestedTags: jsonb("suggested_tags").$type<string[]>().default([]),
+
+  // Agent metadata
+  metadata: jsonb("metadata").$type<{
+    discoveryTopic?: string;
+    sourceAgent?: string;
+    confidenceScore?: number;
+    urlVerified?: boolean;
+    [key: string]: unknown;
+  }>(),
+
+  // Review workflow
+  status: submissionStatusEnum("status").default("pending").notNull(),
+  reviewNotes: text("review_notes"),
+  reviewedAt: timestamp("reviewed_at"),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Relations
 export const creatorsRelations = relations(creators, ({ many }) => ({
   resources: many(resources),
@@ -212,3 +254,6 @@ export type NewResource = typeof resources.$inferInsert;
 export type Tag = typeof tags.$inferSelect;
 export type NewTag = typeof tags.$inferInsert;
 export type ResourceType = (typeof resourceTypeEnum.enumValues)[number];
+export type SubmissionStatus = (typeof submissionStatusEnum.enumValues)[number];
+export type PendingSubmission = typeof pendingSubmissions.$inferSelect;
+export type NewPendingSubmission = typeof pendingSubmissions.$inferInsert;
