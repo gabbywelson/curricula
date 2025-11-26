@@ -8,9 +8,7 @@ const submissionSchema = z.object({
   description: z.string().optional(),
   url: z.string().url("Invalid URL"),
   type: z.enum(resourceTypeEnum.enumValues, {
-    errorMap: () => ({
-      message: `Type must be one of: ${resourceTypeEnum.enumValues.join(", ")}`,
-    }),
+    message: `Type must be one of: ${resourceTypeEnum.enumValues.join(", ")}`,
   }),
   price: z.string().optional(),
   imageUrl: z.string().url("Invalid image URL").optional().or(z.literal("")),
