@@ -8,6 +8,7 @@ export const env = createEnv({
     BETTER_AUTH_URL: z.string().url().optional(),
     SUBMISSION_API_TOKEN: z.string().min(32),
     PERPLEXITY_API_KEY: z.string().min(1),
+    OPENAI_API_KEY: z.string().min(1),
     // Admin creation script vars (optional - only needed for db:create-admin)
     ADMIN_EMAIL: z.string().email().optional(),
     ADMIN_PASSWORD: z.string().min(8).optional(),
