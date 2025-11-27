@@ -1,18 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import type { PendingSubmission } from "@/db/schema";
+import Link from "next/link";
+import type { PendingSubmission, Creator, Category, Tag } from "@/db/schema";
 import { rejectSubmission } from "./actions";
+import { ApprovalModal } from "./ApprovalModal";
 import posthog from "posthog-js";
 
 interface SubmissionCardProps {
   submission: PendingSubmission;
+  creators: Creator[];
+  categories: Category[];
+  tags: Tag[];
 }
 
-export function SubmissionCard({ submission }: SubmissionCardProps) {
+export function SubmissionCard({
+  submission,
+  creators,
+  categories,
+  tags,
+}: SubmissionCardProps) {
   const [isRejecting, setIsRejecting] = useState(false);
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [rejectNotes, setRejectNotes] = useState("");
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
+  const [approvedSlug, setApprovedSlug] = useState<string | null>(null);
 
   const metadata = submission.metadata as {
     discoveryTopic?: string;
@@ -22,7 +34,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
     notes?: string;
   } | null;
 
-  const tags = (submission.suggestedTags as string[]) ?? [];
+  const suggestedTags = (submission.suggestedTags as string[]) ?? [];
 
   const handleReject = async () => {
     setIsRejecting(true);
@@ -48,6 +60,72 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
       minute: "2-digit",
     }).format(date);
   };
+
+  const handleApproved = (resourceSlug: string) => {
+    setApprovedSlug(resourceSlug);
+    setShowApprovalModal(false);
+    posthog.capture("submission_card_approved", {
+      submission_id: submission.id,
+      resource_slug: resourceSlug,
+    });
+  };
+
+  // Show success state after approval
+  if (approvedSlug) {
+    return (
+      <div className="overflow-hidden rounded-xl border border-emerald-500/30 bg-emerald-500/5">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10">
+              <svg
+                className="h-5 w-5 text-emerald-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3 className="font-serif text-lg text-emerald-400">
+                Resource Approved!
+              </h3>
+              <p className="text-sm text-[#a1a1aa]">{submission.title}</p>
+            </div>
+          </div>
+          <Link
+            href={`/resources/${approvedSlug}`}
+            className="flex items-center gap-2 rounded-lg bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-500/20"
+            onClick={() =>
+              posthog.capture("approved_resource_link_clicked", {
+                resource_slug: approvedSlug,
+              })
+            }
+          >
+            View Resource
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-hidden rounded-xl border border-[#27272a] bg-[#18181b]/50">
@@ -116,14 +194,14 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           </div>
         </div>
 
-        {/* Tags */}
-        {tags.length > 0 && (
+        {/* Suggested Tags */}
+        {suggestedTags.length > 0 && (
           <div className="mt-4">
             <h4 className="mb-2 text-xs font-medium uppercase tracking-wider text-[#71717a]">
               Suggested Tags
             </h4>
             <div className="flex flex-wrap gap-1.5">
-              {tags.map((tag) => (
+              {suggestedTags.map((tag) => (
                 <span
                   key={tag}
                   className="rounded bg-[#27272a] px-2 py-0.5 text-xs text-[#a1a1aa]"
@@ -248,9 +326,14 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                 Reject
               </button>
               <button
-                className="rounded-lg bg-emerald-500/10 px-3 py-1.5 text-sm font-medium text-emerald-400 cursor-not-allowed"
-                disabled
-                title="Coming soon"
+                onClick={() => {
+                  setShowApprovalModal(true);
+                  posthog.capture("approval_modal_opened", {
+                    submission_id: submission.id,
+                    submission_title: submission.title,
+                  });
+                }}
+                className="rounded-lg bg-emerald-500/10 px-3 py-1.5 text-sm font-medium text-emerald-400 transition-colors hover:bg-emerald-500/20"
                 type="button"
               >
                 Approve
@@ -259,6 +342,18 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           )}
         </div>
       </div>
+
+      {/* Approval Modal */}
+      {showApprovalModal && (
+        <ApprovalModal
+          submission={submission}
+          creators={creators}
+          categories={categories}
+          tags={tags}
+          onClose={() => setShowApprovalModal(false)}
+          onApproved={handleApproved}
+        />
+      )}
     </div>
   );
 }

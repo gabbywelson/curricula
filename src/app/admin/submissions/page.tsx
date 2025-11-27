@@ -2,7 +2,12 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { auth, isAdmin } from "@/lib/auth";
-import { getPendingSubmissions } from "./actions";
+import {
+  getPendingSubmissions,
+  getAllCreators,
+  getAllCategories,
+  getAllTags,
+} from "./actions";
 import { SubmissionCard } from "./SubmissionCard";
 
 export default async function SubmissionsPage() {
@@ -18,7 +23,13 @@ export default async function SubmissionsPage() {
     redirect("/admin/unauthorized");
   }
 
-  const submissions = await getPendingSubmissions();
+  // Fetch all data in parallel
+  const [submissions, creators, categories, tags] = await Promise.all([
+    getPendingSubmissions(),
+    getAllCreators(),
+    getAllCategories(),
+    getAllTags(),
+  ]);
 
   return (
     <div className="min-h-screen">
@@ -96,7 +107,13 @@ export default async function SubmissionsPage() {
         ) : (
           <div className="space-y-4">
             {submissions.map((submission) => (
-              <SubmissionCard key={submission.id} submission={submission} />
+              <SubmissionCard
+                key={submission.id}
+                submission={submission}
+                creators={creators}
+                categories={categories}
+                tags={tags}
+              />
             ))}
           </div>
         )}
