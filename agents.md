@@ -60,3 +60,4 @@ We use PostHog for client-side analytics.
 - `src/db`: Database schema, client, and seed scripts.
 - `src/lib`: Utility functions and shared logic.
 
+

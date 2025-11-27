@@ -71,3 +71,4 @@ export default async function DiscoverPage() {
     </div>
   );
 }
+

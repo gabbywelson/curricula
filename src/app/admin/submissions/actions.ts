@@ -28,3 +28,4 @@ export async function rejectSubmission(id: number, notes?: string) {
   revalidatePath("/admin/submissions");
 }
 
+

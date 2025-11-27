@@ -72,6 +72,10 @@ Guidelines:
 - Prefer primary sources (official course pages, publisher sites) over aggregators
 - Include a mix of free and paid resources
 - Focus on quality over quantity
+- Prefer high-quality, indie creators over mainstream ones when possible
+- Prefer resources that are sold directly by the creator over resources that are sold through a third party.
+- Avoid resources that are too sales-y or marketing-heavy.
+- Examples of high-quality, indie creators: Ali Abdaal, Cal Newport, Naval Ravikant, MacSparky, Tiago Forte, Lenny Rachitsky, Will Larson, Sarah Drasner,etc.
 - For books, use publisher or Amazon links
 - For courses, use official platform links
 - Provide accurate pricing when possible`,
